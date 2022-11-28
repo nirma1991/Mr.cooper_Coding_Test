@@ -2,18 +2,13 @@ package com.example.coding_test_app.meetingsInfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.example.coding_test_app.data.FirebaseCallback
 import com.example.coding_test_app.data.Meeting
-import com.example.coding_test_app.data.Response
-import com.example.coding_test_app.meetings.MeetingsRepository
-import kotlinx.coroutines.Dispatchers
 
 class MeetingsInfoViewModel (
     private val repository: MeetingsInfoRepository = MeetingsInfoRepository()
 ): ViewModel() {
-    fun setResponseUsingLiveData(meeting: Meeting) : LiveData<String>{
-        return repository.getResponseFromRealtimeDatabaseUsingLiveData(meeting)
+    fun setResponseUsingLiveData(title : String,date: String,notes : String,author : String,duration : String,meetingName: String) : LiveData<String>{
+        return repository.getResponseFromRealtimeDatabaseUsingLiveData(title, date, notes, author, duration, meetingName)
     }
 
     // Different Approches

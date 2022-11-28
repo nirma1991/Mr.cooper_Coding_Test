@@ -14,6 +14,7 @@ import java.io.Serializable
 
 class MeetingAdapter(private val context: Context, meetingModelArrayList: ArrayList<Meeting>) :
     RecyclerView.Adapter<MeetingAdapter.ViewHolder>() {
+    var meetingName = ""
     private val meetingModelArrayList: ArrayList<Meeting>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MeetingAdapter.ViewHolder {
         // to inflate the layout for each item of recycler view.
@@ -25,6 +26,12 @@ class MeetingAdapter(private val context: Context, meetingModelArrayList: ArrayL
         // to set data to textview and imageview of each card layout
         val model: Meeting = meetingModelArrayList[position]
         holder.meetingNameTV.setText(model.title)
+        // To Get RealTime Database Child Value from Parent data
+
+        if(position == 0) meetingName = "Meeting1"
+        else if(position == 1) meetingName = "Meeting2"
+        else if(position == 2) meetingName = "Meeting3"
+
         holder.meetingNameTV.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, MeetingInfoActivity::class.java)
             intent.putExtra("Title", model.title)
@@ -32,6 +39,7 @@ class MeetingAdapter(private val context: Context, meetingModelArrayList: ArrayL
             intent.putExtra("Notes", model.notes)
             intent.putExtra("Duration", model.duration)
             intent.putExtra("Author", model.author)
+            intent.putExtra("MeetingName", meetingName)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         })

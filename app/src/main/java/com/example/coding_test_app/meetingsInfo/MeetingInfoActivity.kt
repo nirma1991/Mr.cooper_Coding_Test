@@ -29,7 +29,7 @@ class MeetingInfoActivity : AppCompatActivity() {
     lateinit var durationET: EditText
     lateinit var authorET: EditText
     lateinit var Save: Button
-
+    var meetingName: String = ""
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,13 +53,17 @@ class MeetingInfoActivity : AppCompatActivity() {
         var duration: String = ""
         var author: String = ""
 
+
         if (extras != null) {
             title = extras.getString("Title").toString()
             date = extras.getString("Date").toString()
             notes = extras.getString("Notes").toString()
             duration = extras.getString("Duration").toString()
             author = extras.getString("Author").toString()
+            meetingName = extras.getString("MeetingName").toString()
         }
+
+        Log.i("MeetingName", meetingName)
 
         titleTV.text = title
         dateET.text = date
@@ -93,21 +97,22 @@ class MeetingInfoActivity : AppCompatActivity() {
         }
 
         Save.setOnClickListener(View.OnClickListener {
-            val meetingNotes = Meeting(titleTV.text.toString(),
+            var meetingNotes = Meeting(titleTV.text.toString(),
                 dateET.text.toString(),
                 notesET.text.toString(),
                 authorET.text.toString(),
                 durationET.text.toString())
-            setResponseUsingCallback(meetingNotes)
+            setResponseUsingCallback(titleTV.text.toString(),
+                dateET.text.toString(),
+                notesET.text.toString(),
+                authorET.text.toString(),
+                durationET.text.toString(),meetingName)
         })
     }
-
-    private fun setResponseUsingCallback(meetingNotes : Meeting) {
-        viewModel.setResponseUsingLiveData(meetingNotes).observe(this, {
+    private fun setResponseUsingCallback(title : String,date: String,notes : String,author : String,duration : String,meetingName : String) {
+        viewModel.setResponseUsingLiveData(title, date, notes, author, duration, meetingName).observe(this, {
             val intent = Intent(this@MeetingInfoActivity, MeetingsActivity::class.java)
             startActivity(intent)
         })
     }
-
-
 }

@@ -1,26 +1,25 @@
 package com.example.coding_test_app.meetingsInfo
 
 import androidx.lifecycle.MutableLiveData
-import com.example.coding_test_app.data.FirebaseCallback
-import com.example.coding_test_app.data.Meeting
-import com.example.coding_test_app.data.Response
 import com.example.coding_test_app.utils.Constants.MEETINGS_REF
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.tasks.await
 
 
 class MeetingsInfoRepository(
     private val rootRef: DatabaseReference = FirebaseDatabase.getInstance().reference,
     private val meetingRef: DatabaseReference = rootRef.child(MEETINGS_REF)
 ) {
-    fun getResponseFromRealtimeDatabaseUsingLiveData(meeting: Meeting): MutableLiveData<String> {
+    fun getResponseFromRealtimeDatabaseUsingLiveData(title : String,date: String,notes : String,author : String,duration : String, meetingName: String): MutableLiveData<String> {
         var mutableLiveData = MutableLiveData<String>()
 
-        meetingRef.child("Meeting1").child("notes").setValue(meeting.notes)
-        meetingRef.child("Meeting1").child("date").setValue(meeting.date)
-        meetingRef.child("Meeting1").child("duration").setValue(meeting.duration)
-        meetingRef.child("Meeting1").child("author").setValue(meeting.author)
+        val meetingInfo: HashMap<String, Any> = HashMap()
+        meetingInfo["notes"] = notes
+        meetingInfo["date"] = date
+        meetingInfo["duration"] = duration
+        meetingInfo["author"] = author
+
+        meetingRef.child(meetingName).updateChildren(meetingInfo)
             .addOnCompleteListener { task ->
                 mutableLiveData.value = task.toString()
             }
